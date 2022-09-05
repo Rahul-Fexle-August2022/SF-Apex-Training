@@ -1,0 +1,28 @@
+public class StaticWaysToDealsWithCollections {
+public StaticWaysToDealsWithCollections(){
+        Map<String,Map<String,List<String>>>mapOfCountriesWithStatesAndCitiesDetails=new Map<String,Map<String,List<String>>>();
+        
+        List<String> CityList1=new List<String>();
+        CityList1.add('Jaipur');
+        CityList1.add('Ajmer');
+        Map<String,List<String>> State1=new Map<String,List<String>>();
+        State1.put('Rajasthan', CityList1);
+        mapOfCountriesWithStatesAndCitiesDetails.put('India',State1);
+        
+        List<String> CityList2=new List<String>();
+        CityList2.add('Texas');
+        CityList2.add('Washington');
+        Map<String,List<String>> State2=new Map<String,List<String>>();
+        State2.put('NC', CityList2);
+        mapOfCountriesWithStatesAndCitiesDetails.put('USA',State2);
+        
+        List<String> CityList3=new List<String>();
+        CityList3.add('Patna');
+        CityList3.add('Muzaffarpur');
+        Map<String,List<String>> State3=new Map<String,List<String>>();
+        State3.put('Bihar', CityList3);
+        mapOfCountriesWithStatesAndCitiesDetails.put('India1',State3);
+        
+        System.debug(mapOfCountriesWithStatesAndCitiesDetails);
+ }  
+}
