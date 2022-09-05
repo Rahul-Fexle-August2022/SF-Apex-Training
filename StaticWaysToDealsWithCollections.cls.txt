@@ -1,5 +1,5 @@
 public class StaticWaysToDealsWithCollections {
-public StaticWaysToDealsWithCollections(){
+public StaticWaysToDealsWithCollections(){                      //Create a cunstructor
         Map<String,Map<String,List<String>>>mapOfCountriesWithStatesAndCitiesDetails=new Map<String,Map<String,List<String>>>();
         
         List<String> CityList1=new List<String>();
