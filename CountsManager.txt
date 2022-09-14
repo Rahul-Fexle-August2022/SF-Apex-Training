@@ -1,0 +1,56 @@
+public class CountsManager {
+     
+      public static void updateNoOfStudentsDetails(String schoolName)     //Method for update No. of students
+    {
+        if(schoolName!=null)     // Check if School name is null or not
+         {
+            // Create a list to store school data in a variable which name is schoolList
+            List<School__c>schoolList= [SELECT Id, Name, (SELECT Id FROM Students1__r) FROM School__c WHERE Name=: schoolName] ;  
+                              
+            for(School__c sch: schoolList)  // Use for each loop to access school details
+              {
+                 sch.No_of_Students__c= sch.Students1__r.size();   // Put total no. of students in No. of students field 
+              }
+             
+            System.debug('#### No. Of students'+ schoolList);     // Print details of schoolList with no. of students
+            update schoolList;    // Update no. of students in schoolList
+          }
+        else
+         {
+            System.debug('Error!!! please enter school Name');   //Show error msg if school name is null
+         }
+    }
+    
+    
+     public static void updateNoOfClassesDetails(Id schoolId)    ////Method for update No. of Classes
+     {
+         if(schoolId!=null)    // check if School Id is null or not
+          {
+              // Create a list to store school data in a variable which name is schools
+            List<School__c>schools= [SELECT Id, Name, (SELECT Id FROM Classes__r) FROM School__c WHERE Id=: schoolId ];
+             
+             if(schools.size()>0)
+              {
+                  
+                for(School__c sch: Schools)  // Use for each loop to access school details
+                  {
+                     sch.No_Of_Classes__c= sch.Classes__r.size();   // Put total no. of Classes in No. of Classes field 
+                  }
+                  
+                  System.debug('#### School'+ schools);   // Print details of schools with no. of Classes
+                  update schools;   // Update no. of students in schools
+                 
+              }
+                else
+                  {
+                    System.debug('Error!!! School not found by Id');    //Show error msg if school Id is wrong
+                  }
+           }
+        
+          else
+           {
+             System.debug('Error!!! please enter school Id');  //Show error msg if school Id is null
+           }
+         
+      }
+}
