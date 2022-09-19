@@ -1,0 +1,62 @@
+/**
+*
+*  Purpose          :   Class to demonstrate the dynamic ways to deal with or populate collections in apex.
+*
+*  Created Date     :   09/06/2022
+*
+*  Created By       :   Rahul Kumar Gupta
+*
+*  Revision Logs    :   V_1.0 - Created
+*
+**/
+public class DynamicWaysToDealsWithCollections {
+    Map<String,Map<String,List<Student__c>>>mapOfSchoolNameWithClassNameAndRelatedStudentsDetails;
+    
+    //constructor
+    public DynamicWaysToDealsWithCollections(){
+        
+        mapOfSchoolNameWithClassNameAndRelatedStudentsDetails = new Map<String, Map<String, List<Student__c>>>();
+        
+                   List<School__c>SchoolList=new List<School__c>();
+                   SchoolList=[SELECT Id,Name FROM School__c ];
+        
+        for(School__c scl:SchoolList){
+                  map<string, List<Student__c>> classDetails = new map<string, List<Student__c>>();
+            
+                  List<Class__c> ClassList = new List<Class__c>();
+                  ClassList = [SELECT Id,Name FROM Class__c WHERE School__r.Id =:scl.Id ];
+            
+                  for(Class__c clss: ClassList){
+                         List<Student__c> StudentList = new List<Student__c>();  
+                         StudentList=[SELECT Id, Name,Date_Of_Birth__c,Father_s_Name__c FROM Student__c WHERE Class__r.Id =:clss.Id];
+            
+                         ClassDetails.put(clss.Name,studentList);
+                         mapOfSchoolNameWithClassNameAndRelatedStudentsDetails.put(scl.Name, ClassDetails);
+        }
+     }
+        system.debug('##### mapOfSchoolNameWithClassNameAndRelatedStudentsDetails=>'+ mapOfSchoolNameWithClassNameAndRelatedStudentsDetails);
+        
+   }
+}
+
+
+
+/**|DEBUG|##### mapOfSchoolNameWithClassNameAndRelatedStudentsDetails=>
+ Delhi Public School=
+                   {
+                      1st BSEB=
+                            (
+                                      Student__c:
+                                      {
+                                        Id=a065g00000HrCL7AAN, Name=Ashu Jha, Date_Of_Birth__c=2004-08-11 00:00:00, 
+                                        Father_s_Name__c=Jha, Class__c=a015g00000bMGpkAAG, RecordTypeId=0125g000000eMu0AAE
+                                      }, 
+                                      Student__c:
+                                      {
+                                       Id=a065g00000HrDuMAAV, Name=SALMAN KHAN, Date_Of_Birth__c=1999-09-10 00:00:00, 
+                                       Father_s_Name__c=SALIM KHAN, Class__c=a015g00000bMGpkAAG, RecordTypeId=0125g000000eMu0AAE}), 
+                    1st CBSE=
+                              (
+                                      Student__c:{Id=a065g00000HrCLHAA3, Nam
+                    } 
+  **/
