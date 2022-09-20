@@ -1,0 +1,60 @@
+/*
+ Test class for Check CountsManager
+ Created By   : Rahul Gupta
+ Date         : 20/09/2022
+ Test Case    : All passes
+ Code Coverage: 85%
+
+ */
+
+@isTest
+public class CountsManagerTest {
+    @testSetup
+    static void setup()
+    {   //Insert School details 
+        School__c scl= new School__c();
+        scl.Name= 'Delhi Public School';
+        scl.No_Of_Teachers__c= 20;
+        scl.No_of_Students__c= 250;
+        scl.No_Of_Classes__c =6;
+        insert scl;
+        
+        //Insert Class details
+        Class__c cls= new Class__c();
+        cls.Name= '1st class';
+        cls.Class_Teacher_Name__c= 'Modiji';
+        cls.Co_Ordinator__c= 'Yogiji';
+        cls.No_of_Students__c= 30;
+        cls.School__c= scl.Id;
+        insert cls;
+        
+        //Insert Student details
+        Student__c stu= new Student__c();
+        stu.Name= 'Rahul Gandhi';
+        stu.Date_Of_Birth__c=Date.newInstance(1991, 01, 01);
+        stu.Father_s_Name__c= 'Rajeev Gandhi';
+        stu.Father_s_Annual_Income__c= 81000;
+        stu.Class__c= cls.Id;
+        stu.School__c= scl.Id;
+        insert stu;
+    }
+    @isTest
+    private static void updateNoOfStudentsDetailsTest()   // Method for check No. of students details
+    {
+        CountsManager.updateNoOfStudentsDetails('Delhi Public School');  //Call Method from CountsManager
+        
+        //Query to fetch No. of students
+        School__c schoolDetail = [SELECT No_of_Students__c From School__c Where Name = 'Delhi Public School'];  
+        System.assertEquals(1, schoolDetail.No_of_Students__c);
+     }
+    @isTest
+    private static void updateNoOfClassesDetailsTest()    // Method for check No. of Class details
+    {
+        // Create a list to store school data including Id
+        List<School__c>sclId= [SELECT Id, Name FROM School__c WHERE Name=: 'Delhi Public School'];  
+        CountsManager.updateNoOfClassesDetails('a005g000032nAdSAAU');  //Call Method from CountsManager
+         //Query to fetch No. of Classes
+        School__c schoolDetail = [SELECT No_Of_Classes__c From School__c Where Id=: sclId];
+        System.assertEquals(4,schoolDetail.No_Of_Classes__c); 
+    }
+}
