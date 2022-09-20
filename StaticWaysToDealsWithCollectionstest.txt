@@ -1,0 +1,22 @@
+@isTest
+public class StaticWaysToDealsWithCollectionsTest {
+  @isTest 
+    static void testStaticWays()
+    {
+        // Map for insert details of Country & States
+        Map<String,Map<String,List<String>>>TestOfCountryWithCityAndStates=new Map<String,Map<String,List<String>>>();
+        List<String>TestListOfCity= new List<String>();  // List to insert City details
+        
+        TestListOfCity.add('Jaipur');
+        TestListOfCity.add('Ajmer');
+        Map<String,List<String>> TestMapOfState= new Map<String,List<String>>(); 
+        TestMapOfState.put('Rajasthan',TestListOfCity);
+        TestOfCountryWithCityAndStates.put('India',TestMapOfState);
+        // Create an Object to call method of  StaticWaysToDealsWithCollections
+        StaticWaysToDealsWithCollections a=new StaticWaysToDealsWithCollections();   
+         
+       // Compare expected and actual value
+       System.assertEquals(TestOfCountryWithCityAndStates.containsKey('India'),a.mapOfCountriesWithStatesAndCitiesDetails.containsKey('India'));
+      
+    }
+}
