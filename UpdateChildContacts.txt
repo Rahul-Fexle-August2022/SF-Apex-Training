@@ -1,0 +1,73 @@
+/**
+*
+*  Purpose          :   Update all child contacts related to an account when the Name is updated.
+*
+*  Created Date     :   10/06/2022
+*
+*  Created By       :   Rahul Kumar Gupta
+*
+*  Revision Logs    :   V_1.0 - Created
+*
+**/
+
+
+trigger AccountUpdate on Account (before update,after update) 
+{
+    //if user insert less than 4 character in account name
+    if(Trigger.isBefore && Trigger.isUpdate)
+    {
+        for(Account acc: Trigger.New)
+        {
+            if(acc.Name.length()<4)
+            {
+                acc.addError('Name should be greater than 3 char');
+            }
+        }
+    }
+    
+    if(Trigger.isAfter && Trigger.isUpdate)
+    {
+        //stores id of accounts which name changed
+        Set<Id>accIdsWhichGotNameChanged= new Set<Id>();
+        
+        for(Account AccNew: Trigger.New)
+        {
+            //Get the old details in 'accOld' with help of OldMap
+            Account accOld= Trigger.OldMap.get(accNew.Id);
+            
+               if(accNew.Name!=accOld.Name)
+                {
+                  accIdsWhichGotNameChanged.add(accNew.Id);  
+                }
+                
+            // This set 'accIdsWhichGotNameChanged' will have account id which got account name changed
+            List<Account> accWithContacts=[SELECT id,name,AccountNumber,(SELECT id,name,firstName,lastName,Unique_Key__c FROM Contacts) 
+                                              FROM Account WHERE Id in:accIdsWhichGotNameChanged];
+            
+            List<Contact>conListToUpdate= new List<Contact>(); // create list to store updated contact details with unique key
+            
+            for(Account acc: accWithContacts)
+            {
+                List<Contact> conOfTheLoopedAccount= acc.Contacts;
+                
+                for(Contact con:conOfTheLoopedAccount)
+                {
+                    /*Fill unique key field with last 4 characters of account name, 
+                    account no., contact first name, contact lastname*/
+                    con.Unique_Key__c= acc.name.substring(acc.name.length()-4,acc.name.length())+
+                                       acc.AccountNumber.substring(acc.AccountNumber.length()-4,acc.AccountNumber.length())+
+                                       con.firstname.substring(con.firstname.length()-4,con.firstname.length())+
+                                       con.lastname.substring(con.lastname.length()-4,con.lastname.length());
+                    
+                    conListToUpdate.add(con);
+                }
+            }
+            if(conListToUpdate.size()>0)
+            {
+                UPDATE conListToUpdate;
+            }
+            
+        }
+    }
+
+}
